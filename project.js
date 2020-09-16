@@ -456,10 +456,11 @@ function removeEgg(){
     }
     
     else{ //non prende l'uovo
-       var tween_egg2= new TWEEN.Tween(egg.position)
-                        .to({x:-10}, 1600) 
+        var eggend= -11;
+        var tween_egg2= new TWEEN.Tween(egg.position)
+                        .to({x:eggend}, 1600) 
        
-       tween_egg2.start();
+        tween_egg2.start();
     }
 }
 
