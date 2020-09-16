@@ -425,7 +425,7 @@ function drawEggs(){
         egg.scale.z= 0.6;
         
         
-        egg.position.set(10, -0.9, -0.2);
+        egg.position.set(15, -0.9, -0.2);
 
         var eggend=1;
 
