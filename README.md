@@ -1,4 +1,4 @@
-# **Easter Egg Bunny Hunt!**
+# **Easter Egg Bunny Hunt!** :rabbit2:
 ### Interactive Graphics Course Final Project 
 #### by Virginia Sanfilippo
 
