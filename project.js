@@ -456,9 +456,9 @@ function removeEgg(){
     }
     
     else{ //non prende l'uovo
-        var eggend= -11;
+        var eggend= -12;
         var tween_egg2= new TWEEN.Tween(egg.position)
-                        .to({x:eggend}, 1600) 
+                        .to({x:eggend}, 1700) 
        
         tween_egg2.start();
     }
