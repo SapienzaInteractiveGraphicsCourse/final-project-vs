@@ -20,7 +20,7 @@ let well;
 
 let groupRun; //, running;
 
-let run_check= false, run_fixed_check= false, jump_check= false, fall_check=false, stop_check= false, hi_check= false, night_check= false;
+let run_check= false, run_fixed_check= false, jump_check= false, jump_check_egg= false, jump_check_well=false, fall_check=false, stop_check= false, hi_check= false, night_check= false;
 
 let tween_run, tween_fixedrun, tween_egg, tween_b1up, tween_b2up, tween_well, tween_hi; //start_run, start_fixed_run, start_eggs, start_backlegs1 and 2, start well, start hi
 
@@ -97,15 +97,22 @@ function init(){
         if(x=="ArrowUp"){
             if(!stop_check){
                 jump_check=true;
-
+                jump_check_egg=true;
+                jump_check_well=true;
+                
                 pause();
                 jump();
                 
                 setTimeout(function jmpchk(){
+                    jump_check_well=false;
                     jump_check=false;
                 }, 350);
                 
-                setTimeout(restart,80);
+                setTimeout(function jmpchk(){
+                    jump_check_egg=false;
+                }, 200);
+                
+                setTimeout(restart, 280);
             }
         }
     }
@@ -425,28 +432,35 @@ function drawEggs(){
         egg.scale.z= 0.6;
         
         
-        egg.position.set(5, -0.9, -0.2);
+        egg.position.set(10, -0.9, -0.2);
 
         var eggend=1;
 
         tween_egg= new TWEEN.Tween(egg.position)
-                        .to({x:eggend}, 800)
+                        .to({x:eggend}, 1600)
                         .onComplete(function(){removeEgg()});
         
         tween_egg.start();
 
-        setTimeout(drawEggs, 1400 + Math.random()*2000);
+        setTimeout(drawEggs, 2500 + Math.random()*2000);
     }
 }
     
 function removeEgg(){
-    eggGeometry.dispose();
-    materialEgg.dispose();
-    scene.remove(egg);
-
-    eggCounter++;
+    if(!jump_check_egg){ //prende l'uovo
+        eggCounter++;
+        eggGeometry.dispose();
+        materialEgg.dispose();
+        scene.remove(egg);
+        document.getElementById("scoren").innerHTML= eggCounter;
+    }
     
-    document.getElementById("scoren").innerHTML= eggCounter;
+    else{ //non prende l'uovo
+       var tween_egg2= new TWEEN.Tween(egg.position)
+                        .to({x:-10}, 1600) 
+       
+       tween_egg2.start();
+    }
 }
 
 function drawWell(){
@@ -454,7 +468,7 @@ function drawWell(){
     well= new THREE.Mesh(wellGeometry, materialBlack);
     well.rotation.set(0.6, -0.15, -0.3);
     
-    well.position.set(7, -1.7, 0);
+    well.position.set(15, -1.7, 0);
     
     
     scene.add(well);
@@ -466,14 +480,14 @@ function addWell(){
         drawWell();
 
         var wellfall= 0.5;
-        var wellend=-9;
+        var wellend=-15.5;
 
         tween_well= new TWEEN.Tween(well.position)
-                            .to({x:wellfall}, 950)
+                            .to({x:wellfall}, 1800)
                             .onComplete(function(){checkFall()});
 
         var tween_well2= new TWEEN.Tween(well.position)
-                            .to({x:wellend}, 950)
+                            .to({x:wellend}, 1800)
                             .onComplete(function dltwell(){
                                 tween_well2.stop;});
 
@@ -481,17 +495,16 @@ function addWell(){
         tween_well.start();
 
 
-        setTimeout(addWell, 15000 + Math.random()*1000);
+        setTimeout(addWell, 12000 + Math.random()*1000);
     }
 }
 
 function checkFall(){
-    if(!jump_check){
+    if(!jump_check_well){
         fall();
         stop();
     }
 }
-
 
 var rabbitx, runxup, runxdown; 
 function run(){
@@ -582,13 +595,13 @@ function run_fixed(){
 
 function jump(){
     var rabbity=-0.8;
-    var jumpy=1.4;
+    var jumpy=2;
     
     var earz= 0.2;
     var taily= -0.63;
     
-    var upspeed= 250;
-    var downspeed= 250;
+    var upspeed= 280;
+    var downspeed= 280;
     
     var upspeedear= 120;
     var downspeedear= 140;
