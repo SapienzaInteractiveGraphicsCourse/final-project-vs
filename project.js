@@ -425,12 +425,12 @@ function drawEggs(){
         egg.scale.z= 0.6;
         
         
-        egg.position.set(5, -0.9, -0.2);
+        egg.position.set(10, -0.9, -0.2);
 
         var eggend=1;
 
         tween_egg= new TWEEN.Tween(egg.position)
-                        .to({x:eggend}, 800)
+                        .to({x:eggend}, 1600)
                         .onComplete(function(){removeEgg()});
         
         tween_egg.start();
