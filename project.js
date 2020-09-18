@@ -10,7 +10,7 @@ let faceGeometry, earGeometry, eyeGeometry, noseGeometry, mouthOGeometry, mouthV
 let body, tail, legF1, legF2, legB1, legB2, legF1low, legF2low, legB1low, legB2low;
 let bodyGeometry, tailGeometry, legGeometry;
 
-let f1, f2, b1, b2; //groups for whole legs
+let f1, f2, b1, b2;
 
 let eggGeometry;
 let egg;
@@ -18,11 +18,11 @@ let egg;
 let wellGeometry;
 let well;
 
-let groupRun; //, running;
+let groupRun;
 
 let run_check= false, run_fixed_check= false, jump_check= false, jump_check_egg= false, jump_check_well=false, fall_check=false, stop_check= false, hi_check= false, night_check= false;
 
-let tween_run, tween_fixedrun, tween_egg, tween_egg2, tween_b1up, tween_b2up, tween_well, tween_well2, tween_hi; //start_run, start_fixed_run, start_eggs, start_backlegs1 and 2, start well, start hi
+let tween_run, tween_fixedrun, tween_egg, tween_egg2, tween_b1up, tween_b2up, tween_well, tween_well2, tween_hi;
 
 let eggCounter=0;
 
@@ -163,10 +163,6 @@ function drawRabbit(){
     
     rabbit.position.set(-4.5, -0.8, -0.2);
     rabbit.rotation.y= -0.2;
-    
-    //rabbit.rotation.y=-1.55; //front
-    //rabbit.rotation.y=1.55; //back
-    //rabbit.rotation.y=2.9; //other side
     
     rabbit.add(head);
     
@@ -424,7 +420,7 @@ function drawEggs(){
         
         egg= new THREE.Mesh(eggGeometry, materialEgg);
         scene.add(egg);
-        egg.rotation.y+=1; //so that the texture shows correctly
+        egg.rotation.y+=1;
         
         
         egg.scale.x= 0.6;
@@ -447,7 +443,7 @@ function drawEggs(){
 }
     
 function removeEgg(){
-    if(!jump_check_egg){ //prende l'uovo
+    if(!jump_check_egg){
         eggCounter++;
         eggGeometry.dispose();
         materialEgg.dispose();
@@ -455,7 +451,7 @@ function removeEgg(){
         document.getElementById("scoren").innerHTML= eggCounter;
     }
     
-    else{ //non prende l'uovo
+    else{
         var eggend= -13;
         tween_egg2= new TWEEN.Tween(egg.position)
                         .to({x:eggend}, 2130) 
@@ -551,7 +547,7 @@ function single_run(){
     
     tween_run.chain(tween_run2);
     
-    if(!stop_check) //se premo stop si ferma senza "strisciare"
+    if(!stop_check)
         tween_run.start();
 }
 
