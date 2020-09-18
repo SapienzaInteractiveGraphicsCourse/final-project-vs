@@ -10,7 +10,7 @@ let faceGeometry, earGeometry, eyeGeometry, noseGeometry, mouthOGeometry, mouthV
 let body, tail, legF1, legF2, legB1, legB2, legF1low, legF2low, legB1low, legB2low;
 let bodyGeometry, tailGeometry, legGeometry;
 
-let f1, f2, b1, b2; //groups for whole legs
+let f1, f2, b1, b2;
 
 let eggGeometry;
 let egg;
@@ -18,11 +18,11 @@ let egg;
 let wellGeometry;
 let well;
 
-let groupRun; //, running;
+let groupRun;
 
 let run_check= false, run_fixed_check= false, jump_check= false, jump_check_egg= false, jump_check_well=false, fall_check=false, stop_check= false, hi_check= false, night_check= false;
 
-let tween_run, tween_fixedrun, tween_egg, tween_b1up, tween_b2up, tween_well, tween_hi; //start_run, start_fixed_run, start_eggs, start_backlegs1 and 2, start well, start hi
+let tween_run, tween_fixedrun, tween_egg, tween_b1up, tween_b2up, tween_well, tween_well2, tween_hi; //start_run, start_fixed_run, start_eggs, start_backlegs1 and 2, start well, start hi
 
 let eggCounter=0;
 
@@ -110,7 +110,7 @@ function init(){
                 
                 setTimeout(function jmpchk(){
                     jump_check_egg=false;
-                }, 200);
+                }, 250);
                 
                 setTimeout(restart, 280);
             }
@@ -163,10 +163,6 @@ function drawRabbit(){
     
     rabbit.position.set(-4.5, -0.8, -0.2);
     rabbit.rotation.y= -0.2;
-    
-    //rabbit.rotation.y=-1.55; //front
-    //rabbit.rotation.y=1.55; //back
-    //rabbit.rotation.y=2.9; //other side
     
     rabbit.add(head);
     
@@ -442,12 +438,12 @@ function drawEggs(){
         
         tween_egg.start();
 
-        setTimeout(drawEggs, 2500 + Math.random()*2000);
+        setTimeout(drawEggs, 2800 + Math.random()*2000);
     }
 }
     
 function removeEgg(){
-    if(!jump_check_egg){ //prende l'uovo
+    if(!jump_check_egg){
         eggCounter++;
         eggGeometry.dispose();
         materialEgg.dispose();
@@ -455,10 +451,10 @@ function removeEgg(){
         document.getElementById("scoren").innerHTML= eggCounter;
     }
     
-    else{ //non prende l'uovo
-        var eggend= -12;
+    else{
+        var eggend= -13;
         var tween_egg2= new TWEEN.Tween(egg.position)
-                        .to({x:eggend}, 1700) 
+                        .to({x:eggend}, 2130) 
        
         tween_egg2.start();
     }
@@ -481,23 +477,26 @@ function addWell(){
         drawWell();
 
         var wellfall= 0.5;
-        var wellend=-15.5;
 
         tween_well= new TWEEN.Tween(well.position)
-                            .to({x:wellfall}, 1800)
+                            .to({x:wellfall}, 2570)
                             .onComplete(function(){checkFall()});
 
-        var tween_well2= new TWEEN.Tween(well.position)
-                            .to({x:wellend}, 1800)
-                            .onComplete(function dltwell(){
-                                tween_well2.stop;});
-
-        tween_well.chain(tween_well2);
         tween_well.start();
 
 
-        setTimeout(addWell, 12000 + Math.random()*1000);
+        setTimeout(addWell, 10000 + Math.random()*1000);
     }
+}
+
+function wellAway(){
+    var wellend=-14;
+    
+    tween_well2= new TWEEN.Tween(well.position)
+                    .to({x:wellend}, 2570)
+                    .onComplete(function dltwell(){
+                        tween_well2.stop;});
+    tween_well2.start();
 }
 
 function checkFall(){
@@ -505,6 +504,7 @@ function checkFall(){
         fall();
         stop();
     }
+    else wellAway();
 }
 
 var rabbitx, runxup, runxdown; 
@@ -547,7 +547,7 @@ function single_run(){
     
     tween_run.chain(tween_run2);
     
-    if(!stop_check) //se premo stop si ferma senza "strisciare"
+    if(!stop_check)
         tween_run.start();
 }
 
@@ -653,17 +653,19 @@ function jump(){
 function fall(){
     fall_check=true;
     
-    var rabbity=-0.8;
-    var fally=0.5;
+    var rabbity= -0.8;
+    var fally= 1.5;
     
     
     var downspeed= 80;
     var rotatespeed= 100;
     
-    var tween_fall= new TWEEN.Tween(rabbit.position)
-                    .to({y:rabbity-fally}, downspeed);
-    var tween_fall2= new TWEEN.Tween(rabbit.rotation)
+    var tween_fall= new TWEEN.Tween(rabbit.rotation)
                     .to({x:-1, y:0.1}, rotatespeed);
+    var tween_fall2= new TWEEN.Tween(rabbit.position)
+                    .to({y:rabbity-fally, z:-4}, downspeed)
+                    .onComplete(function dltrabbit(){
+                        (scene.remove(rabbit));});
     
     tween_fall.chain(tween_fall2);
     tween_fall.start();
@@ -698,14 +700,13 @@ function start(){
     
     rabbit.position.set(-4.5, -0.8, -0.2);
     rabbit.rotation.set(0, -0.2, 0);
-
+    
     tween_hi.start();
     setTimeout(run, 1000);
     
     setTimeout(drawEggs, 7000);
 
     setTimeout(addWell, 15000);
-    
 }
 
 function stop(){
@@ -724,6 +725,7 @@ function stop(){
     tween_b2up.stop();
     tween_egg.stop(); 
     tween_well.stop();
+    tween_well2.stop();
     
     }
 
