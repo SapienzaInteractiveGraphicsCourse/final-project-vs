@@ -1,8 +1,6 @@
-/*eslint-env es6*/
-
 let scene, camera, renderer;
 let material, materialBlack, materialPink, materialTeeth, materialEgg; 
-let rabbit, head;
+let rabbit, head, bod;
 
 let face, ear1, ear2, eye1, eye2, nose, mouthV, mouthO, teeth1, teeth2, cheek1, cheek2;
 let faceGeometry, earGeometry, eyeGeometry, noseGeometry, mouthOGeometry, mouthVGeometry, teethGeometry, cheekGeometry;
@@ -10,7 +8,7 @@ let faceGeometry, earGeometry, eyeGeometry, noseGeometry, mouthOGeometry, mouthV
 let body, tail, legF1, legF2, legB1, legB2, legF1low, legF2low, legB1low, legB2low;
 let bodyGeometry, tailGeometry, legGeometry;
 
-let f1, f2, b1, b2;
+let f1, f2, b1, b2; //groups for whole legs
 
 let eggGeometry;
 let egg;
@@ -22,7 +20,7 @@ let groupRun;
 
 let run_check= false, run_fixed_check= false, jump_check= false, jump_check_egg= false, jump_check_well=false, fall_check=false, stop_check= false, hi_check= false, night_check= false;
 
-let tween_run, tween_fixedrun, tween_egg, tween_egg2, tween_b1up, tween_b2up, tween_well, tween_well2, tween_hi;
+let tween_run, tween_fixedrun, tween_egg, tween_egg2, tween_b1up, tween_b2up, tween_well, tween_well2, tween_hi; //start_run, start_fixed_run, start_eggs, start_backlegs1 and 2, start well, start hi
 
 let eggCounter=0;
 
@@ -165,35 +163,9 @@ function drawRabbit(){
     rabbit.rotation.y= -0.2;
     
     rabbit.add(head);
-    
-    rabbit.add(f1);
-    rabbit.add(f2);
-    rabbit.add(b1);
-    rabbit.add(b2);
+    rabbit.add(bod);
     
     scene.add(rabbit);
-}
-
-function introRabbit(){
-    document.getElementById("stop").disabled = true;
-    document.getElementById("home").disabled = true;
-    
-    hi_check=true;
-    drawRabbit();
-    rabbit.position.x=-2.75;
-    
-    rabbit.rotation.y=-1.25;
-    head.rotation.x=0.3;
-    
-    tween_hi= new TWEEN.Tween(head.rotation)
-                    .to({x: -0.3}, 1100);
-    var tween_hi2= new TWEEN.Tween(head.rotation)
-                    .to({x: 0.3}, 1100);
-    
-    tween_hi.chain(tween_hi2);
-    tween_hi2.chain(tween_hi);
-    
-    tween_hi.start();
 }
 
 function drawHead(){
@@ -293,13 +265,15 @@ function drawHead(){
 }
 
 function drawBody(){
+    bod= new THREE.Group();
+    
     //BODY
     bodyGeometry= new THREE.IcosahedronGeometry(1, 0);
     
     body= new THREE.Mesh(bodyGeometry, material);
     body.position.set(0.8,-0.25,0);
     
-    rabbit.add(body);
+    bod.add(body);
     
     
     //TAIL
@@ -308,7 +282,7 @@ function drawBody(){
     tail= new THREE.Mesh(tailGeometry, material);
     tail.position.set(body.position.x-0.8, body.position.y-0.38, 0);
     
-    rabbit.add(tail);
+    bod.add(tail);
     
     
     //LEGS
@@ -376,6 +350,11 @@ function drawBody(){
     scene.add(f2);
     scene.add(b1);
     scene.add(b2);
+    
+    bod.add(f1);
+    bod.add(f2);
+    bod.add(b1);
+    bod.add(b2);
 }
 
 function drawEggs(){
@@ -420,7 +399,7 @@ function drawEggs(){
         
         egg= new THREE.Mesh(eggGeometry, materialEgg);
         scene.add(egg);
-        egg.rotation.y+=1;
+        egg.rotation.y+=1; //so that the texture shows correctly
         
         
         egg.scale.x= 0.6;
@@ -505,6 +484,28 @@ function checkFall(){
         stop();
     }
     else wellAway();
+}
+
+function introRabbit(){
+    document.getElementById("stop").disabled = true;
+    document.getElementById("home").disabled = true;
+    
+    hi_check=true;
+    drawRabbit();
+    rabbit.position.x=-2.75;
+    
+    rabbit.rotation.y=-1.25;
+    head.rotation.x=0.3;
+    
+    tween_hi= new TWEEN.Tween(head.rotation)
+                    .to({x: -0.3}, 1100);
+    var tween_hi2= new TWEEN.Tween(head.rotation)
+                    .to({x: 0.3}, 1100);
+    
+    tween_hi.chain(tween_hi2);
+    tween_hi2.chain(tween_hi);
+    
+    tween_hi.start();
 }
 
 var rabbitx, runxup, runxdown; 
