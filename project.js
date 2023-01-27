@@ -104,7 +104,7 @@ function init(){
                 setTimeout(function jmpchk(){
                     jump_check_well=false;
                     jump_check=false;
-                }, 350);
+                }, 250);
                 
                 setTimeout(function jmpchk(){
                     jump_check_egg=false;
